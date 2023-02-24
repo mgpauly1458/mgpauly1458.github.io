@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="title" content="Integration Hell And How To Avoid It | Maxwell Pauly | Professional Portfolio">
+    <meta name="description" content="">
+    <meta name="image" content="https://github.com/mgpauly1458.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Maxwell Pauly | Professional Portfolio">
+    <meta property="og:url" content="https://mgpauly1458.github.io/essays/integration-hell-and-how-to-avoid-it.html">
+    <meta property="og:title" content="Integration Hell And How To Avoid It | Maxwell Pauly | Professional Portfolio">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="https://github.com/mgpauly1458.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/techfolio-theme/default.css">
+    <link rel="stylesheet" type="text/css" href="/css/rouge/github.css">
+    <!-- Load MathJax if 'mathjax: true' is found in your _config.yml. -->
+    
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-MML-AM_CHTML">
+    </script>
+    
+
+    <title>Integration Hell And How To Avoid It | Maxwell Pauly | Professional Portfolio</title>
+  </head>
+  <body>
+  <header class="navbar navbar-expand navbar-light bg-light bg-gradient border-bottom">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Maxwell Pauly</a>
+    <div class="ms-auto">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <a class="nav-link" href="/#projects">Projects</a>
+        <a class="nav-link" href="/#essays">Essays</a>
+        <a class="nav-link" href="/resume.html">Resume</a>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<div class="container py-4">
+  <h1 class="display-4">Integration Hell And How To Avoid It</h1>
+  <span class="date">04 Feb 2023</span>
+  <hr>
+  <p><img width="400px" class="rounded float-start pe-4" src="../img/mergeMeme.jpg" /></p>
+
+<h2 id="game-changer">Game Changer</h2>
+
+<p>After learning more about version control, Integrated Development Environments, linting tools, and coding standards, I have a much better feel of what it means to develop software “correctly”. I’ve made a ton of little 50 lines or less projects, but I’ve never made a really big robust system that many developers contributed to. It feels like the concepts I listed above are a necessary prerequisite for any meaningful software project, and they should be embedded into any software engineer’s brain.</p>
+
+<h2 id="personal-experience">Personal Experience</h2>
+
+<p>Myself and a few friends submitted an entry to the 2021 Hawaii Annual Coding Challenge (HACC). This was a non-traditional hackathon that spanned about three weeks. We were tasked with making an app that can help the Department of Land and Natural Resources (DLNR) track the foot traffic on Hawaii’s hiking trails. Over three weeks, three of us inexperienced developers created a full stack web application that was semi-complex. A thorough list of its features can be found in the project post I made <a href="https://mgpauly1458.github.io/projects/hawaii-annual-coding-challenge.html">here</a>. The point is we were cloning, and merging, and pushing, and rebasing, and reverting, and resetting, and cloning, and editing each other’s code and it was madness. I’ll never forget what breaking the repo felt like because I used the wrong git command, and I’ll never forget the pain it caused us to untangle eachothers code because we didn’t have a good system set in place. Half the time we couldn’t even understand each other’s code, so we had to pull one another aside for help which completely destroyed that developer’s focus if he was working on something. We didn’t use any of the concepts listed above and were kind of just winging it.</p>
+
+<h2 id="post-mortem">Post Mortem</h2>
+
+<p>After breaking our build and fixing it, and breaking our build and fixing it what felt like hundreds of times we finally got it to work and submitted it. We pulled several all nighters to make that happen. We came together after the hackathon was over and talked about what we could do better next time in a post mortem meeting. We confessed our tests and integration procedures took way too much time, and we should conform to standard integration practices like version control, test frameworks, using a linter, having team based commit/build standards, and keeping our code clean and DRY.</p>
+
+<h2 id="vow-of-excellence">Vow of Excellence</h2>
+
+<p>After that painful learning experience I forced myself to master the git basics. And from here on, I vow to never write another line of code for a project until a test is written, a build script is made which only takes one command to completely build the project, have a shared development database and deployment database which are separate from one another, and have a standard linting tool that checks the code of each developer. With the experience I’ve had with ESLint and IntelliJ, I realized that setting these things up isn’t that painful after all. It feels good to get that green check mark in IntelliJ and look at my spectacular looking code at the end. After watching the screen casts and using these tools, I’m quite excited to start another project with others, and do it all over again but the right way this time.</p>
+
+
+</div>
+
+<footer class="navbar navbar-expand navbar-light bg-light bg-gradient border-top">
+  <div class="container-fluid">
+    <div class="ms-auto">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <small><a class="nav-link" href="https://techfolios.github.io">Made with Techfolios</a></small>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </body>
+</html>

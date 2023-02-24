@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="title" content="Hand Written Digit Recognition | Maxwell Pauly | Professional Portfolio">
+    <meta name="description" content="">
+    <meta name="image" content="https://github.com/mgpauly1458.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Maxwell Pauly | Professional Portfolio">
+    <meta property="og:url" content="https://mgpauly1458.github.io/projects/hand-written-digit.html">
+    <meta property="og:title" content="Hand Written Digit Recognition | Maxwell Pauly | Professional Portfolio">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="https://github.com/mgpauly1458.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/techfolio-theme/default.css">
+    <link rel="stylesheet" type="text/css" href="/css/rouge/github.css">
+    <!-- Load MathJax if 'mathjax: true' is found in your _config.yml. -->
+    
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-MML-AM_CHTML">
+    </script>
+    
+
+    <title>Hand Written Digit Recognition | Maxwell Pauly | Professional Portfolio</title>
+  </head>
+  <body>
+  <header class="navbar navbar-expand navbar-light bg-light bg-gradient border-bottom">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Maxwell Pauly</a>
+    <div class="ms-auto">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <a class="nav-link" href="/#projects">Projects</a>
+        <a class="nav-link" href="/#essays">Essays</a>
+        <a class="nav-link" href="/resume.html">Resume</a>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<div class="container py-4">
+  <h1 class="display-4">Hand Written Digit Recognition</h1>
+ <p><img class="img-fluid" src="https://user-images.githubusercontent.com/74911365/215585524-09bed3ca-9d22-44a5-be5e-6390098f55c8.png" /></p>
+
+<h1 id="handwritten-digit-tensorflow-web-application">Handwritten Digit TensorFlow Web Application</h1>
+<p>This is a personal project which I am the sole contributor. It’s creation involved training a TensorFlow neural network to recognize hand written digits, deploying the model to the cloud, and creating a frontend user interface which allows people to draw their own digits with a mouse and recieve the model’s prediction of what digit it thinks it sees (0-9).</p>
+
+<h1 id="contents">Contents</h1>
+<ul>
+  <li><a href="#usage">Usage</a></li>
+  <li><a href="#model-training">Model Training</a>
+    <ul>
+      <li><a href="#training-the-model">Training the Model</a></li>
+      <li><a href="#testing-real-images">Testing Real Images</a></li>
+    </ul>
+  </li>
+  <li><a href="#deploy-to-google-cloud-platform--gcp--function">Deploy to Google Cloud Platform (GCP) Function</a>
+    <ul>
+      <li><a href="#saving-the-weights-in-cloud-storage">Saving the Weights in Cloud Storage</a></li>
+      <li><a href="#function">Function</a></li>
+    </ul>
+  </li>
+  <li><a href="#web-application-frontend">Web Application Frontend</a></li>
+  <li><a href="#web-application-backend">Web Application Backend</a></li>
+  <li><a href="#deploy-to-heroku">Deploy to Heroku</a></li>
+</ul>
+
+<h1 id="usage">Usage</h1>
+<p>Use the mouse to draw a digit on the canvas and click submit. In a few seconds, the model’s prediction of what digit it thinks you drew will pop up in a box at the top of the screen. Try it out <a href="http://www.imageguesser.xyz/">here</a>. <br /></p>
+
+<!-- https://user-images.githubusercontent.com/74911365/155085753-2fee649c-0af6-4c8a-9d80-57072a31c1fc.mp4
+ -->
+<h1 id="model-training">Model Training</h1>
+<p>The tfTest folder contains all the code related to training and testing the model. Below are the steps I took to ensure the model worked properly before deploying it to the cloud.</p>
+<h2 id="training-the-model">Training the Model</h2>
+<p>A TensorFlow sequential model was trained using 70,000 pixel arrays (28x28) which correspond to a 28x28 pixel image of a person’s hand written digit. Each array element shows how light or dark a specific pixel is on the 28x28 image, depicted as a value somewhere between 0 and 1.</p>
+
+<p><strong><em>tfTest/trainModel.py</em></strong>
+<br />
+The training data is split into two randomized sets: a training set of 60,000 arrays and a testing set of 10,000 arrays.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+
+<span class="c1">#Train Model
+</span><span class="n">mnist</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">datasets</span><span class="p">.</span><span class="n">mnist</span>
+
+<span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">),(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">Y_test</span><span class="p">)</span> <span class="o">=</span> <span class="n">mnist</span><span class="p">.</span><span class="n">load_data</span><span class="p">()</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">utils</span><span class="p">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">utils</span><span class="p">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The model is initialized using the ‘relu’ activation function and form fitted to intake the 28x28 flattened pixel array.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">models</span><span class="p">.</span><span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Flatten</span><span class="p">(</span><span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span><span class="mi">28</span><span class="p">)))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">softmax</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>The model is compiled and fit to the training data and then evaluated with the test data.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s">'adam'</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s">'sparse_categorical_crossentropy'</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'accuracy'</span><span class="p">])</span>
+<span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">loss</span><span class="p">,</span> <span class="n">accuracy</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">Y_test</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">accuracy</span><span class="p">)</span>
+</code></pre></div></div>
+<h2 id="testing-real-images">Testing Real Images</h2>
+<p>I drew a digit and resized it to 28x28 using GNU’s Image Manipulation Program (GIMP). Using the opencv-python package, the digit image file was read into memory and converted to an np array. The np array is passed to the model and a prediction is made and displayed using pyplot.</p>
+
+<p><strong><em>tfTest/loadModelTest.py</em></strong>
+<br />
+Draw an image on any drawing software and save it to the project directory. The digit must be black and must have a white background and resized to 28x28. 
+<br />
+<img src="https://user-images.githubusercontent.com/74911365/155035435-1ffa50fb-8f0a-42cb-982c-f5c61667f2e5.png" alt="ksnip_20220221-125412" /></p>
+
+<p>Add imports and load the model (loading the model allows you to use it without having to train it again).</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">cv2</span> <span class="k">as</span> <span class="n">cv</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">models</span><span class="p">.</span><span class="n">load_model</span><span class="p">(</span><span class="s">"model"</span><span class="p">)</span>
+</code></pre></div></div>
+<p>Use opencv to read the image into memory and invert it to have black pixels show white, and white pixels show as black.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">image</span> <span class="o">=</span> <span class="n">cv</span><span class="p">.</span><span class="n">imread</span><span class="p">(</span><span class="s">'testData/digit.png'</span><span class="p">)[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">invert</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="n">image</span><span class="p">]))</span>
+</code></pre></div></div>
+<p>The image will now look like this to the computer: <br />
+<img src="https://user-images.githubusercontent.com/74911365/155035882-9000bc24-7ef7-4809-8fac-776f8731fbb3.png" alt="ksnip_20220221-130108" /></p>
+
+<p>Pass the inverted pixel array to the model and display the prediction.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'Interpretation: {}'</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">prediction</span><span class="p">)))</span>
+</code></pre></div></div>
+<p><img src="https://user-images.githubusercontent.com/74911365/155035705-8a1161e7-c991-4b9d-b0a3-f6a6f12c27c9.png" alt="ksnip_20220221-125833" /></p>
+
+<h1 id="deploy-to-google-cloud-platform-gcp-function">Deploy to Google Cloud Platform (GCP) Function</h1>
+<p>The challenges associated with deploying a custom TensorFlow model to the cloud are discussed here. I started off with a trained and tested model. The end state is a RESTful Web API that can recieve HTTP POST requests containing image pixel data, and returns the model’s prediction of what digit that pixel data represents.</p>
+
+<h2 id="saving-the-weights-in-cloud-storage">Saving the Weights in Cloud Storage</h2>
+<p>Cloud functions are a great way to bring RESTful functionality to any small script or program. Cloud functions often only have access to small amounts of volatile memory, which can’t store a saved model indefinitly. Everytime the function’s memory resets (which happens during periods of inactivity) the model needs to be recreated. To achieve this, the weights of the model needed to be saved and stored in non-volatile memory (Google Cloud Storage). This allowed the function to initialize itself by downloading the weights and creating the model after every time the function memory reset.</p>
+
+<p>The weights saved in a Google Cloud Storage Bucket.
+<img src="https://user-images.githubusercontent.com/74911365/155038387-c4bcfcc0-446b-4a42-8d76-48c439bab87a.png" alt="image" /></p>
+
+<h2 id="function">Function</h2>
+<p>This is the function’s source code which lives in the cloud. The function’s primary objective is to recieve pixel data via an HTTP request, and return the model’s prediction.</p>
+
+<p><strong><em>tfTest/googleCloudFunction.py</em></strong>
+<br />
+Imports and a global model variable which is set to None (it will later be assigned to the actual TF model after it is initialized).</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+<span class="kn">from</span> <span class="nn">google.cloud</span> <span class="kn">import</span> <span class="n">storage</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>download_from_bucket function which can download blobs from an associated project bucket. This was very easy to do from a networking stand point because all GCP functions have an environment variable called ‘GOOGLE_APPLICATION_CREDENTIALS’, which contains all authentication information and is automatically loaded by the google.cloud.storage client. It just works.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">download_from_bucket</span><span class="p">(</span><span class="n">bucketName</span><span class="p">,</span> <span class="n">blobName</span><span class="p">,</span> <span class="n">fileDestination</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">storage_client</span> <span class="o">=</span> <span class="n">storage</span><span class="p">.</span><span class="n">Client</span><span class="p">()</span>
+      <span class="n">bucket</span> <span class="o">=</span> <span class="n">storage_client</span><span class="p">.</span><span class="n">get_bucket</span><span class="p">(</span><span class="n">bucketName</span><span class="p">)</span>
+      <span class="n">blob</span> <span class="o">=</span> <span class="n">bucket</span><span class="p">.</span><span class="n">blob</span><span class="p">(</span><span class="n">blobName</span><span class="p">)</span>
+      <span class="n">blob</span><span class="p">.</span><span class="n">download_to_filename</span><span class="p">(</span><span class="n">fileDestination</span><span class="p">)</span>
+      <span class="k">print</span><span class="p">(</span><span class="s">"Blob {} downloaded to {}."</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">blobName</span><span class="p">,</span> <span class="n">fileDestination</span><span class="p">))</span>
+    <span class="k">except</span><span class="p">:</span>
+      <span class="k">print</span><span class="p">(</span><span class="s">"Download failed"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Main function that is called when an API request is made. Variables initialized and the model is checked. If there is no model, then download the weighs into the tmp folder and initialize it.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sonny_hwd</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">model</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">model</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+      <span class="n">download_from_bucket</span><span class="p">(</span><span class="s">"sonny-bucket"</span><span class="p">,</span> <span class="s">"weights/hwdWeights.data-00000-of-00001"</span><span class="p">,</span> <span class="s">"/tmp/hwdWeights.data-00000-of-00001"</span><span class="p">)</span>
+      <span class="n">download_from_bucket</span><span class="p">(</span><span class="s">"sonny-bucket"</span><span class="p">,</span> <span class="s">"weights/hwdWeights.index"</span><span class="p">,</span> <span class="s">"/tmp/hwdWeights.index"</span><span class="p">)</span>
+      <span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">models</span><span class="p">.</span><span class="n">Sequential</span><span class="p">()</span>
+      <span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Flatten</span><span class="p">(</span><span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span><span class="mi">28</span><span class="p">)))</span>
+      <span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">))</span>
+      <span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">))</span>
+      <span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">))</span>
+      <span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">softmax</span><span class="p">))</span>
+      <span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s">'adam'</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s">'sparse_categorical_crossentropy'</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'accuracy'</span><span class="p">])</span>
+      <span class="n">model</span><span class="p">.</span><span class="n">load_weights</span><span class="p">(</span><span class="s">'/tmp/hwdWeights'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Once there is a working model, retrieve the request payload and covert it to json. Read the string data which is delimited by commas and convert every string to an integer.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">request_json</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">get_json</span><span class="p">()</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">request_json</span><span class="p">[</span><span class="s">'image'</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">","</span><span class="p">)</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">image</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Convert the python list into an np array and reshape to be 28x28. Pass the np array to the model and return the prediction in a json response. The cloud function will automatically add the return value from the function to the payload of the HTTP response.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">image</span><span class="p">).</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">))</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">image</span><span class="p">))</span>
+    <span class="n">response</span><span class="p">[</span><span class="s">'prediction'</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre></div></div>
+<!-- The web application's objective is to create an interface for users to draw a digit with their mouse and then display the digit that the model thinks it sees.  -->
+
+<h1 id="web-application-frontend">Web Application Frontend</h1>
+<p>The frontend’s objective is to inform users of the functionality of the app and the neural network’s capabilities. It also provides an interface (an html canvas) which allows users to draw a number with their mouse, and submit the drawing to the model. Below is an explanation of how the canvas interface was created.</p>
+
+<p><strong><em>templates/home.html</em></strong>
+HTML canvas element added to homepage.</p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;canvas</span> <span class="na">id=</span><span class="s">"canvas"</span> <span class="na">style=</span><span class="s">"background-color:white;"</span> <span class="na">class=</span><span class="s">"responsive"</span><span class="nt">&gt;&lt;/canvas&gt;</span>
+</code></pre></div></div>
+<p><img src="https://user-images.githubusercontent.com/74911365/155042928-d932fff0-efe6-4e99-bc2d-9cc2b97378d6.png" width="400" /></p>
+
+<p>Using javascript select the canvas, and associate it’s context with it’s height and width (the height and width are hard coded in CSS).</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="dl">"</span><span class="s2">#canvas</span><span class="dl">"</span><span class="p">)</span>
+<span class="kd">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="dl">'</span><span class="s1">2d</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="mi">500</span><span class="p">;</span>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="mi">500</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Establish a position variable which will be updated whenever the mousemove, mousedown, and mouseenter events occur.</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">pos</span> <span class="o">=</span> <span class="p">{</span> <span class="na">x</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="na">y</span><span class="p">:</span> <span class="mi">0</span> <span class="p">};</span>
+
+<span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">mousemove</span><span class="dl">'</span><span class="p">,</span> <span class="nx">draw</span><span class="p">);</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">mousedown</span><span class="dl">'</span><span class="p">,</span> <span class="nx">setPosition</span><span class="p">);</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">mouseenter</span><span class="dl">'</span><span class="p">,</span> <span class="nx">setPosition</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>setPosition is called whenever the mouse button is clicked and updates the pos variable declared earlier. Moving the mouse calls the draw function which causes the canvas to draw on itself at the mouse’s current X and Y coordinate. The drawing will only occur if the mouse is located somewhere on the canvas.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">setPosition</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">rect</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getBoundingClientRect</span><span class="p">();</span>
+    <span class="nx">x</span> <span class="o">=</span> <span class="nx">rect</span><span class="p">.</span><span class="nx">x</span><span class="p">;</span>
+    <span class="nx">y</span> <span class="o">=</span> <span class="nx">rect</span><span class="p">.</span><span class="nx">y</span><span class="p">;</span>
+    <span class="nx">pos</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">clientX</span> <span class="o">-</span> <span class="nx">x</span><span class="p">;</span>
+    <span class="nx">pos</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">clientY</span> <span class="o">-</span> <span class="nx">y</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">draw</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// mouse left button must be pressed</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">buttons</span> <span class="o">!==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span> <span class="c1">// begin</span>
+
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">lineWidth</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">lineCap</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">round</span><span class="dl">'</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">strokeStyle</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">black</span><span class="dl">'</span><span class="p">;</span>
+
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">moveTo</span><span class="p">(</span><span class="nx">pos</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">y</span><span class="p">);</span> <span class="c1">// from</span>
+  <span class="nx">setPosition</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">lineTo</span><span class="p">(</span><span class="nx">pos</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">y</span><span class="p">);</span> <span class="c1">// to</span>
+
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">stroke</span><span class="p">();</span> <span class="c1">// draw it!</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p><img src="https://user-images.githubusercontent.com/74911365/155043225-c01fce24-dcea-4d92-ae5f-5c1fda7e61d9.png" width="400" /></p>
+
+<p>When the submit button is pressed, three things then happen:</p>
+
+<p>All pixels on the canvas that were not changed to black by the mouse are given the white value. This is very necessary to properly process the data later on.</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">createWhiteBackground</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">imgData</span><span class="o">=</span><span class="nx">ctx</span><span class="p">.</span><span class="nx">getImageData</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">data</span><span class="o">=</span><span class="nx">imgData</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span><span class="nx">i</span><span class="o">+=</span><span class="mi">4</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">255</span><span class="p">){</span>
+            <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="o">=</span><span class="mi">255</span><span class="p">;</span>
+            <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">255</span><span class="p">;</span>
+            <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="mi">255</span><span class="p">;</span>
+            <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="mi">255</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">putImageData</span><span class="p">(</span><span class="nx">imgData</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The canvas data is saved as a base64 encoded string, which is then passed to the postImageData() function.</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">saveImage</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">toggleLoader</span><span class="p">()</span>
+    <span class="nx">createWhiteBackground</span><span class="p">()</span>
+    <span class="nx">dataURI</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">toDataURL</span><span class="p">()</span>
+    <span class="nx">postImageData</span><span class="p">(</span><span class="nx">dataURI</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>Using a jQuery, the base64 data is sent back to the webserver for further processing. (Note, the reason this had to be done in the browser and not a seperate javascript file is because Django requires a csrf_token to be passed during all post requests. Here the django template system replaces the  with the actual token, which is necessary for the request to successfully complete.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">postImageData</span><span class="p">(</span><span class="nx">uri</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="dl">""</span><span class="p">,</span> <span class="p">{</span>
+        <span class="na">img</span><span class="p">:</span><span class="nx">uri</span><span class="p">,</span>
+        <span class="na">csrfmiddlewaretoken</span><span class="p">:</span> <span class="nb">String</span><span class="p">(</span><span class="dl">''</span><span class="p">),</span>
+    <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">){</span>
+      <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">body</span><span class="dl">"</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="web-application-backend">Web Application Backend</h1>
+<p>The backend’s objective is to serve the static files to users, capture and clean the canvas data, send the cleaned data to the cloud function, and return the model’s prediction back to the frontend.</p>
+
+<p><strong><em>pages/views.py</em></strong>
+<br />
+The Django view, which reads in the base64 encoded string, trims off the header info, and wraps it as a bytes object.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">import</span> <span class="nn">base64</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">saveImage</span><span class="p">,</span> <span class="n">resizeImage</span><span class="p">,</span> <span class="n">readImage</span><span class="p">,</span> <span class="n">sendToCloud</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+
+<span class="k">def</span> <span class="nf">home_page</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="p">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">"POST"</span><span class="p">:</span>
+        <span class="n">image64</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">POST</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"img"</span><span class="p">)</span>
+        <span class="n">imageStringBytes</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">image64</span><span class="p">[</span><span class="mi">22</span><span class="p">:],</span> <span class="s">'utf-8'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The bytes are then decoded and saved locally in the same type of temporary storage as the cloud function.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="n">imageBytes</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">decodebytes</span><span class="p">(</span><span class="n">imageStringBytes</span><span class="p">)</span>
+        <span class="n">saveImage</span><span class="p">(</span><span class="n">imageBytes</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The image is resized, read into memory as an np array, inverted, and sent to the cloud. Once the prediction is returned, the view injects it into the html template, which is then displayed as an alert on the web page.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="n">resizeImage</span><span class="p">()</span>
+        <span class="n">imageData</span> <span class="o">=</span> <span class="n">readImage</span><span class="p">()</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">sendToCloud</span><span class="p">(</span><span class="n">imageData</span><span class="p">)</span>
+        <span class="n">prediction</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)[</span><span class="s">'prediction'</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">,{</span><span class="s">'prediction'</span><span class="p">:</span><span class="n">prediction</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">,{})</span>
+</code></pre></div></div>
+<p>The souce code for all the functions used are located in <strong><em>pages/utils.py</em></strong>
+ which do basically the same thing as the <strong><em>tfTest/loadModelTest.py</em></strong>
+functions discussed earlier.</p>
+
+<h1 id="deploy-to-heroku">Deploy to Heroku</h1>
+<p>Heroku is the web host used for this application. A custom domain was purchased on namecheap.com which is now directly linked to the project.</p>
+
+<p><img src="https://user-images.githubusercontent.com/74911365/155045523-69d4445d-2d0f-412b-9cef-97e9062c8909.png" alt="image" />
+<img src="https://user-images.githubusercontent.com/74911365/155045591-a979166c-448b-4a47-a1b4-9e61594891c2.png" alt="image" /></p>
+
+
+</div>
+
+<footer class="navbar navbar-expand navbar-light bg-light bg-gradient border-top">
+  <div class="container-fluid">
+    <div class="ms-auto">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <small><a class="nav-link" href="https://techfolios.github.io">Made with Techfolios</a></small>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </body>
+</html>

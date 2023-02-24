@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="title" content="Instrumentation &amp; Control Protobot | Maxwell Pauly | Professional Portfolio">
+    <meta name="description" content="">
+    <meta name="image" content="https://github.com/mgpauly1458.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Maxwell Pauly | Professional Portfolio">
+    <meta property="og:url" content="https://mgpauly1458.github.io/projects/IC-protobot.html">
+    <meta property="og:title" content="Instrumentation &amp; Control Protobot | Maxwell Pauly | Professional Portfolio">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="https://github.com/mgpauly1458.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/techfolio-theme/default.css">
+    <link rel="stylesheet" type="text/css" href="/css/rouge/github.css">
+    <!-- Load MathJax if 'mathjax: true' is found in your _config.yml. -->
+    
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-MML-AM_CHTML">
+    </script>
+    
+
+    <title>Instrumentation & Control Protobot | Maxwell Pauly | Professional Portfolio</title>
+  </head>
+  <body>
+  <header class="navbar navbar-expand navbar-light bg-light bg-gradient border-bottom">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Maxwell Pauly</a>
+    <div class="ms-auto">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <a class="nav-link" href="/#projects">Projects</a>
+        <a class="nav-link" href="/#essays">Essays</a>
+        <a class="nav-link" href="/resume.html">Resume</a>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<div class="container py-4">
+  <h1 class="display-4">Instrumentation & Control Protobot</h1>
+ <!-- <img class="img-fluid" src="../img/cotton/cotton-header.png">
+ -->
+<h1 id="ic_protobot">IC_protobot</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p>Our team’s goal is to creat a six wheeled robot that can drive, operate a manipulator arm, detect life, and autonomously navigate. We will officially enter the robot into the <a href="https://urc.marssociety.org/home">University Rover Challenge</a>, June 2022. This write up covers the content I contributed and the tools and frameworks I implemented the design with. The team’s critical design review can be found here: <a href="https://drive.google.com/file/d/1HtWLiNnQ40CGxhcs-scGmpD602fTRI0W/view?usp=sharing">Critical Design Review</a>.</p>
+
+<p>Picture of the robot currently used for prototyping:
+<br />
+<img src="https://user-images.githubusercontent.com/74911365/155123497-79ac5871-d912-4ee8-9e1f-668debe898f1.png" style="width:500px;" /></p>
+
+<h2 id="robot-operating-system-ros">Robot Operating System (ROS)</h2>
+
+<p>ROS is an open source robotics middleware suite and is the premier framework for robotic rapid prototyping. The <a href="https://www.ros.org/">ROS wiki</a> is an outstanding resource to learn more so I won’t go into detail here. The project uses ROS for the majority of the robot’s communication between components and functionality. Each software developer on the project completed the <a href="http://wiki.ros.org/ROS/Tutorials">ROS Tutorials</a> and below is a demonstration of ROS nodes talking to one another and executing commands.</p>
+
+<p><img src="https://user-images.githubusercontent.com/74911365/215602370-4be5e4c6-003c-4562-8e9f-1727dc4e03e1.png" style="width:1000px;" />
+<!-- <video src="https://user-images.githubusercontent.com/74911365/154920396-d8579ff4-1784-4360-8b3e-b7f285558c4d.mp4"/>
+ --></p>
+
+<h2 id="gazebo-simulation">Gazebo Simulation</h2>
+<p>Gazebo is a suite of simulation software that communicates quite nicely with ROS. The team religiously uses gazebo to simulate all prototyped software and hardware dimensions before any fabrication takes place.</p>
+
+<p>A basic gazebo simulation with a turtlebot and obstacles. The turtlebot is using it’s simulated laser scanner and a simple obstacle avoidance algorithm to wander around.</p>
+
+<p><img src="https://user-images.githubusercontent.com/74911365/155137434-49c81e47-bed8-485f-a7df-9dd46aa74114.png" style="width:1000px;" /></p>
+
+<h2 id="simulating-rover-communication">Simulating Rover Communication</h2>
+<p>Below is an image of various ros nodes running, necessary to enable the ros network to communicate with the web based frontend. Here the pilot of the rover can pass data through the web browser, which is recieved through a web socket on a ros node. This is a simple integration test which merely displays the data passed over the browser.</p>
+
+<p><img src="https://user-images.githubusercontent.com/74911365/215602528-64ee7324-53b2-4252-b495-4d9adfbabced.png" style="width:1000px;" /></p>
+
+<h2 id="web-app-graphical-user-interface-gui">Web App Graphical User Interface (GUI)</h2>
+<p>A GUI is needed to control the robot and subsequently compete in the URC competition. The stack begins with a simple web app which interfaces with the ROS network via a web socket. Commands are transferred wirelessly using 802.11 WiFi and the HTTP protocol. The web server was made using Node.js and Express (<a href="https://github.com/anotheruser1458/IC_protobot/blob/main/web_app/server.js">source</a>). The data is displayed to the operator using html/css/javascript (<a href="https://github.com/anotheruser1458/IC_protobot/tree/main/web_app/public/js">source</a>). 
+<!-- The video below shows a demo of the latest prototype where a video feed and three topics are displayed on the homepage. 
+<br>
+The latest GUI prototype can display video output, and topic data. The up and down arrows are pressed on the keyboard and which sends velocity commands to ROS, which can be seen at the bottom of the display.
+<br> --></p>
+
+<p><img src="https://user-images.githubusercontent.com/74911365/215602445-fcd4c945-b702-40a0-b81f-17ec391188f2.png" style="width:1000px;" /></p>
+
+<!-- <video src="https://user-images.githubusercontent.com/74911365/154946249-04c9510b-1193-423e-aa36-a8eb3eec0615.mp4"/>
+ -->
+
+<!-- An earlier prototype, text input in an html form is sent to the ROS network and broadcasted by a node.
+
+ -->
+<!-- <video src="https://user-images.githubusercontent.com/74911365/140019513-80895195-2fa0-49e1-8030-edcdf03711ba.mp4"/>
+ -->
+
+<h2 id="motor-encoders">Motor Encoders</h2>
+
+<p>The robot uses ten motors: six for forward and backward acceleration and four for steering the wheels left and right. I used <a href="https://www.pololu.com/product/3284">Roboclaw</a> motor encoders which communicate over serial ports.</p>
+
+<p>A ‘roboclaw’ object was created using C++ which acts as the bridge between the linux serial ports and the actual encoders (<a href="https://github.com/anotheruser1458/IC_protobot/blob/main/catkin_ws/src/protobot/src/protobot_control/src/roboclaw.cpp">source</a>). This object is used by the ROS node (<a href="https://github.com/anotheruser1458/IC_protobot/blob/main/catkin_ws/src/protobot/src/protobot_control/src/protobot.cpp">source</a>) to properly send and recieve data and control when the wheels spin.</p>
+
+<!-- (video of ros sending and recieving data and turning the wheels) -->
+
+</div>
+
+<footer class="navbar navbar-expand navbar-light bg-light bg-gradient border-top">
+  <div class="container-fluid">
+    <div class="ms-auto">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <small><a class="nav-link" href="https://techfolios.github.io">Made with Techfolios</a></small>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </body>
+</html>

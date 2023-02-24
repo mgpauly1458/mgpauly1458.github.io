@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="title" content="Alaka'i Trail Directory (Hackathon) | Maxwell Pauly | Professional Portfolio">
+    <meta name="description" content="">
+    <meta name="image" content="https://github.com/mgpauly1458.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Maxwell Pauly | Professional Portfolio">
+    <meta property="og:url" content="https://mgpauly1458.github.io/projects/hawaii-annual-coding-challenge.html">
+    <meta property="og:title" content="Alaka'i Trail Directory (Hackathon) | Maxwell Pauly | Professional Portfolio">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="https://github.com/mgpauly1458.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/techfolio-theme/default.css">
+    <link rel="stylesheet" type="text/css" href="/css/rouge/github.css">
+    <!-- Load MathJax if 'mathjax: true' is found in your _config.yml. -->
+    
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-MML-AM_CHTML">
+    </script>
+    
+
+    <title>Alaka'i Trail Directory (Hackathon) | Maxwell Pauly | Professional Portfolio</title>
+  </head>
+  <body>
+  <header class="navbar navbar-expand navbar-light bg-light bg-gradient border-bottom">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Maxwell Pauly</a>
+    <div class="ms-auto">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <a class="nav-link" href="/#projects">Projects</a>
+        <a class="nav-link" href="/#essays">Essays</a>
+        <a class="nav-link" href="/resume.html">Resume</a>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<div class="container py-4">
+  <h1 class="display-4">Alaka'i Trail Directory (Hackathon)</h1>
+ <p><img class="img-fluid" src="https://user-images.githubusercontent.com/74911365/154952499-8de579a1-1ae2-45ea-b541-61a832515775.png" /></p>
+
+<h1 id="overview">Overview</h1>
+<p>I designed the backend and deployment plans for the project. Below are a list of features that I helped work on. For each feature, I was in charge of interpreting the requirements from the project stakeholder, finding suitable frameworks to meet the needs of the project, writing the code for the backend interface for the app’s frontend features, and finding and implementing the cloud services necessary to deploy the design. The project was a success and our team made it to the finals day of the HACC 2021.</p>
+
+<h1 id="alakai-trail-directory">Alaka’i Trail Directory</h1>
+<p>A web application that allows state officials and the general public to monitor the foot-traffic density on any of Hawaii’s hiking trails. This was our team’s entry to the <a href="https://hacc.hawaii.gov">Hawaii Annual Coding Challenge</a> (HACC) 2021, which got us invited to the finalist day where we presented the project to judges and an audience. Also, check out our <a href="https://devpost.com/software/rose-luiwyo">Devpost</a>.</p>
+
+<p><img src="https://user-images.githubusercontent.com/74911365/154952551-95a0dd5d-8de4-4a0d-9539-fd2e8f1870d5.png" width="700" /></p>
+
+<!-- <video src="https://user-images.githubusercontent.com/74911365/155099216-c10141d7-d22f-43de-8fc4-139cb811a7c3.mp4"/>
+ -->
+<h1 id="contents">Contents</h1>
+<ul>
+  <li><a href="#trail-catalog">Trail Catalog</a></li>
+  <li><a href="#safety---etiquette">Safety &amp; Etiquette</a></li>
+  <li><a href="#traffic-information">Traffic Information</a></li>
+  <li><a href="#sign-up">Sign Up</a></li>
+  <li><a href="#reservations">Reservations</a></li>
+  <li><a href="#safety-contact">Safety Contact</a></li>
+  <li><a href="#safety-text-messages">Safety Text Messages</a></li>
+  <li><a href="#donations">Donations</a></li>
+  <li><a href="#mobile-friendly">Mobile Friendly</a></li>
+  <li><a href="#challenges-and-accomplishments">Challenges And Accomplishments</a></li>
+  <li><a href="#one-minute-demo">One-Minute Demo</a></li>
+</ul>
+
+<h1 id="trail-catalog">Trail Catalog</h1>
+<p>Trails are displayed on cards and highlighted on the map using the Leaflet map API.
+<br /><br />
+<img src="https://user-images.githubusercontent.com/74911365/155107754-a7cdbf5f-6df4-475d-b834-7be3556ff077.png" width="900" /></p>
+
+<p>Clicking on a trail’s card reveals details about the hike like the route description, difficluty, total distance, and average time it takes someone to complete the hike.
+<br /><br />
+<img src="https://user-images.githubusercontent.com/74911365/155107992-8b52982f-20f5-498c-ace7-3ea91b21742d.png" width="900" /></p>
+
+<h1 id="safety--etiquette">Safety &amp; Etiquette</h1>
+<p>Hiking can be dangerous, especially for people who have not hiked on Hawaii’s trails before. Our app has a page dedicated to explaining the Department of Land and Natural Resources’ (DLNR) safety guidlines and best practices for hiking on their trails.
+<br /><br />
+<img src="https://user-images.githubusercontent.com/74911365/155108663-3d514da6-0dd4-4b95-867d-ddd21a8ee8e3.png" width="700" /></p>
+
+<h1 id="traffic-information">Traffic Information</h1>
+<p>A user first picks the day and time they wish to hike which automatically updates the trail colors on the map based on an algorithm that combines predicted traffic data and reservation data stored in the app’s database. This helps people spread out and not plan their hike on a trail that is predicted to have a busy day.</p>
+
+<p>According to the DLNR, spreading people out also has the side effect of encouraging better hiking behavior because people are more likely to misbehave when in large groups.
+<br /> <br />
+<img src="https://user-images.githubusercontent.com/74911365/154952750-4908496f-8f39-4671-bfb4-977458b7e3d3.png" width="700" /></p>
+
+<h1 id="sign-up">Sign Up</h1>
+<p>Users have the option to create an account, which will unlock additional features like creating reservations and emergency contacts.
+<br /> <br />
+<img src="https://user-images.githubusercontent.com/74911365/155113519-014505a9-2f83-494c-89f7-714ab5776516.png" /></p>
+
+<h1 id="reservations">Reservations</h1>
+<p>Users with an account can make reservations. To make a reservation a user selects a hike and enters the time, date, and number of people they are taking with them. This data is stored and used to update the trail colors on the homepage, allowing future users to make more informed decisions about their hiking plans.
+<br /><br />
+<img src="https://user-images.githubusercontent.com/74911365/155114147-ccfbe904-3fef-4b0c-9464-e95d38e2f24d.png" alt="image" />
+<br /><br />
+Users can view, update, and delete reservations on their profile page.
+<br /><br />
+<img src="https://user-images.githubusercontent.com/74911365/155114317-cdf866ae-61aa-4f71-95c9-853912ff108a.png" alt="image" /></p>
+
+<h1 id="safety-contact">Safety Contact</h1>
+<p>Users can create an emergency contact, which can be optionally added to a reservation. To create an emergency contact add your contact’s name and phone number.
+<br /> <br />
+<img src="https://user-images.githubusercontent.com/74911365/155114649-c67285ca-dee4-408d-9cd8-7f0477a925ff.png" alt="image" /></p>
+
+<h1 id="safety-text-messages">Safety Text Messages</h1>
+<p>If an emergency contact is added to a reservationto, they will be automatically notified via text message 6 hours after your scheduled hike. This way they know to reach out to you to make sure everything went ok. If no positive contact is made, the text message also includes the location, date, time, and number of people to look for. This is essential information to have when reporting a lost hiker to authorities.
+<br /> <br />
+<img src="https://user-images.githubusercontent.com/74911365/155111859-5f4120a0-a828-4615-a970-66d58db7e1d4.png" height="500" /></p>
+
+<h1 id="donations">Donations</h1>
+<p>Through our donations page, Alaka’i offers users the ability to support their favorite hikes through the Stripe API.
+<br /><br />
+<img src="https://user-images.githubusercontent.com/74911365/155116332-7cde9733-994f-40d3-8015-ede6084e695b.png" height="500" />
+<img src="https://user-images.githubusercontent.com/74911365/155116342-40fee5d7-c925-4791-b3c0-ef1b9ce9a119.png" alt="stripe1" /></p>
+
+<h1 id="mobile-friendly">Mobile Friendly</h1>
+<p>Alakai has a responsive and mobile friendly design.
+<br /><br />
+<img src="https://user-images.githubusercontent.com/74911365/154953181-089b0e7d-4422-486e-89d8-d2970a887086.png" width="700" /></p>
+
+<h1 id="challenges-and-accomplishments">Challenges And Accomplishments</h1>
+<p>The biggest challenge our team encountered was the management of large datasets across multiple local development platforms. Passing the necessary data to every corner of the project was difficult and clunky at first, but through a large-scale overhaul of our database and restructuring to use AJAX requests, we were able to clean up our code and easily access our database information. Another large accomplishment for the team was the sudden delve into web development. A majority of our team has little to no prior experience with web development, yet we were able to use this competition as an opportunity to jump in head first into new territory, which significantly accelerated our growth as programmers. We were able to learn more about web design, proper coding practices, and maximizing the use of version control systems.</p>
+
+<!-- # One-Minute Demo
+This demo shows a user using every feature on the site. They create an account, read the safety guidelines, create an emergency contact, check the traffic report on the hike they want to go on, make a reservation, and donate to the DLNR.
+<br><br> -->
+
+<!-- <video src="https://user-images.githubusercontent.com/74911365/155118422-12c5eb80-c14a-446d-b597-3b0165f8d34b.mp4"/>
+ -->
+
+</div>
+
+<footer class="navbar navbar-expand navbar-light bg-light bg-gradient border-top">
+  <div class="container-fluid">
+    <div class="ms-auto">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <small><a class="nav-link" href="https://techfolios.github.io">Made with Techfolios</a></small>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </body>
+</html>

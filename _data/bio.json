@@ -1,0 +1,72 @@
+{
+  "basics": {
+    "name": "Maxwell Pauly",
+    "label": "Student",
+    "picture": "https://github.com/mgpauly1458.png",
+    "email": "mgpauly@hawaii.edu",
+    "phone": "808-372-6757",
+    "website": "https://mgpauly1458.github.io",
+    "summary": "Computer Engineer B.S. '24 M.S. '25, focus in machine learning, computer architecture, processor and hardware design, performance engineering of software systems, robotic automation. My dream is to start a company so I'm considering a JD/MBA degree after graduating, but the Artificial Intelligence revolution is already here. Maybe I'll have to start a company out of grad school, or join a really cool startup.",
+    "location": { "address": "435 Seaside Ave.", "postalCode": "96815", "city": "Honolulu", "countryCode": "USA", "region": "Hawaii" },
+    "profiles": [
+      { "network": "github", "username": "mgpauly1458", "url": "http://github.com/mgpauly1458" },
+      { "network": "linkedin", "username": "Maxwell Pauly", "url": "https://www.linkedin.com/in/maxwellpauly/" }
+    ]
+  },
+  "interests": [
+    { "name": "Deep Learning" },
+    { "name": "Logic Design" },
+    { "name": "Performance Engineering" },
+    { "name": "Robotics" },
+    { "name": "Business" }
+  ],
+  "skills": [
+    {
+      "name": "Languages and Frameworks",
+      "keywords": [ "C", "C++", "Java", "Javascript", "Assembly", "Django", "Node.js", "Python", "System Verilog" ]
+    },
+    {
+      "name": "Toolsets/OS",
+      "keywords": [ "Linux", "Git/GitHub", "g++", "Clang", "Django", "Node.js", "ROS", "Valgrind", "Javascript", "AWS", "Google Cloud Platform" ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Hawaii, Honolulu, HI",
+      "area": "Computer Engineering (expected Spring, 2024)",
+      "studyType": "B.S.",
+      "startDate": "2021-08-21",
+      "endDate": "2024-05-12",
+      "courses": [ "EE160 Programming for Engineers", "EE205 Object Oriented Programming", "EE260 Introduction to Digital Design", "EE361 Computer and Digital System Design", "EE367 Data Structures and Algorithms", "EE314 Software Engineering", "EE362 Discrete Math"
+      ]
+    }
+  ],
+  "work": [
+    {
+      "company": "United States Marine Corps",
+      "position": "Scout Sniper",
+      "website": "",
+      "startDate": "2016-08-15",
+      "endDate": "2021-08-16",
+      "summary": "Senior Team Leader for reconnissance, surveilance, and precision marksman related missions",
+      "highlights": [
+        "Three deployments to various countries in Asia",
+        "Excellent work ethic and leadership skills",
+        "Technical and practical experience with various radio equipment and frequency planning"
+      ]
+    },
+  ],
+  "awards": [
+    {
+      "title": "Dean's List",
+      "date": "2021-Present",
+      "awarder": "UH Manoa",
+      "summary": "Maintaining a 3.5 or above GPA during each full time semester"
+    }
+  ],
+  "references": [
+    {
+      "name": "Available upon request"
+    }
+  ]
+}
